@@ -1,12 +1,14 @@
 import Banner from "@/components/atoms/Banner";
-import About from "@/components/molecules/About.home";
-import HomeBanner from "@/components/molecules/Banner.home";
-import Process from "@/components/molecules/Process.home";
+import Header from "@/components/molecules/Header";
+import About from "@/components/pages/Home.About";
+import HomeBanner from "@/components/pages/Home.Banner";
+import Process from "@/components/pages/Home.Process";
 import dog_large_banner from "@/public/images/dog_large_banner.jpg"
 
 export default function Home() {
   return (
-    <div className="">
+    <div>
+      <Header />
       <HomeBanner />
       <main className="px-5 pt-6">
         <About />
