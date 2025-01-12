@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import cat_auth from "@/public/images/cat_auth.png"
+import cat_auth from "@/public/images/cat_user_auth.png"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -22,6 +22,8 @@ import { userLoginAction, userRegisterAction } from "@/lib/actions/user.action";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import BackToHome from "@/components/molecules/BackToHome";
 
 const formSchema = z.object({
     fullname: z.string().optional(),
@@ -38,6 +40,7 @@ export default function UserAuth() {
     const user = searchParams.get('user');
     const router = useRouter();
     const [loader, setLoader] = useState(false);
+    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -50,21 +53,25 @@ export default function UserAuth() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // This edge case is not contemplated in the zod validations
-        if(user && !values.fullname) {
-            // TODO: Display notification msg
+        if (user && !values.fullname) {
+            toast({
+                title: "ERROR: Full Name is Empty",
+            })
             return;
         }
-        const authAction = user? userRegisterAction : userLoginAction;
-        
+        const authAction = user ? userRegisterAction : userLoginAction;
+
         setLoader(true);
         await authAction(values)
-        .then(() => {
-            router.push('/organizations')
-            setLoader(false);
-        }) 
-        .catch(() => {
-            //TODO: display err msg
-        })
+            .then(() => {
+                if (user) router.push(`/auth/verify-email?email=${values.email}`)
+                else router.push('/organizations')
+
+                setLoader(false);
+            })
+            .catch((error) => {
+                toast({ title: 'ERROR: Authentication failed', description: error.message })
+            })
     }
 
     return <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col lg:flex-row gap-5 px-5 justify-between items-center pb-5">
@@ -137,7 +144,9 @@ export default function UserAuth() {
                     </div>
                 </form>
             </Form>
-
+            <div className="md:absolute bottom-3 right-3">
+                <BackToHome />
+            </div>
         </div>
     </div>
 }

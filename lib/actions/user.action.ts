@@ -12,3 +12,7 @@ export async function userLoginAction(formData: UserAuthCredentials) {
 export async function userRegisterAction(formData: UserAuthCredentials) {
     console.log(formData)
 }
+
+export async function verifyUserEmailAction(code: strign) {
+    console.log(code)
+}

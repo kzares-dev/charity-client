@@ -1,3 +1,154 @@
+"use client"
+import Image from "next/image";
+import cat_auth from "@/public/images/cat_admin_auth.png"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { useSearchParams } from 'next/navigation'
+import { Button } from "@/components/ui/button"
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import Link from "next/link";
+import { userLoginAction, userRegisterAction } from "@/lib/actions/user.action";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import BackToHome from "@/components/molecules/BackToHome";
+
+const formSchema = z.object({
+    fullname: z.string().optional(),
+    email: z.string().email({
+        message: "You must introduce a valid email."
+    }),
+    password: z.string().min(6, {
+        message: "Password must be at least 6 characters."
+    })
+})
+
 export default function AdminAuth() {
-    return <> </>
+    const searchParams = useSearchParams();
+    const admin = searchParams.get('admin');
+    const router = useRouter();
+    const [loader, setLoader] = useState(false);
+    const { toast } = useToast();
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            fullname: "",
+            email: "",
+            password: "",
+        },
+    })
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        // This edge case is not contemplated in the zod validations
+        if (admin && !values.fullname) {
+            toast({
+                title: "ERROR: Full Name is Empty",
+            })
+            return;
+        }
+        const authAction = admin ? userRegisterAction : userLoginAction;
+
+        setLoader(true);
+        await authAction(values)
+            .then(() => {
+                if (admin) router.push(`/admin/auth/verify-email?email=${values.email}`)
+                else router.push(`/admin/`) //TODO 
+                setLoader(false);
+            })
+            .catch((error) => {
+                toast({ title: 'ERROR: Authentication failed', description: error.message })
+            })
+    }
+
+    return <div className="w-full max-w-[1200px] mx-auto min-h-screen flex flex-col lg:flex-row gap-5 px-5 justify-between items-center pb-5">
+
+        <div className="w-full ">
+            <Image src={cat_auth} alt='' />
+        </div>
+
+        <div className="w-full flex flex-col gap-5 ">
+            <h1 className="text-4xl text-gray-600 font-semibold"> {admin ? "Create Administrator Account" : "Log In"} </h1>
+            {admin && <p className="text-sm text-gray-400 max-w-sm">To create an administration account your email must be approved by your organization administrator</p>}
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-w-md">
+                    {admin && <FormField
+                        control={form.control}
+                        name="fullname"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Full Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="..." {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    This is your public display name.
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />}
+
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Email Address</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="..." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="..." {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    Your password will be protected in our servers
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <div className="w-full flex items-center justify-between">
+                        <Link href={admin ? '/admin/auth' : '/admin/auth?admin=new'}>
+
+                            <p className="text-gray-500 underline pl-0"> {admin ?
+                                "Have an account? Login now" :
+                                "Create an account"} </p>
+                        </Link>
+                        <Button type="submit" disabled={loader}>
+                            {loader && <Loader2 className="animate-spin" />}
+                            Submit
+                        </Button>
+                    </div>
+                </form>
+            </Form>
+            <div className="md:absolute bottom-3 right-3">
+                <BackToHome />
+            </div>
+        </div>
+    </div>
 }
