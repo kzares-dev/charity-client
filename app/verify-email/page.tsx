@@ -1,4 +1,5 @@
 'use client';
+
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
 import cat_email_verification from '@/public/images/cat_email_verification.png'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -24,9 +25,9 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import BackToHome from "@/components/molecules/BackToHome";
 import { useState } from "react";
-import { verifyAdminEmailAction } from "@/lib/actions/admin.action";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { verifyEmailAction } from "@/lib/actions/email.action";
 
 const FormSchema = z.object({
     code: z.string().min(6, {
@@ -50,7 +51,7 @@ export default function VerifyEmail() {
 
     async function onSubmit(values: z.infer<typeof FormSchema>) {
         setLoader(true);
-        await verifyAdminEmailAction(values.code)
+        await verifyEmailAction(values.code, 'id')
             .then(() => {
                 router.push('/admin')
                 setLoader(false);

@@ -11,6 +11,3 @@ export async function adminRegisterAction(formData: AdminAuthCredentials) {
     console.log(formData)
 }
 
-export async function verifyAdminEmailAction(code: string) {
-    console.log(code)
-}
