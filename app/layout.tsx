@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
+import StoreProvider from "@/lib/store/provider/storeProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,8 +20,10 @@ export default function RootLayout({
       <body
         className={`antialiased`}
       >
-        <NextTopLoader showSpinner={false} color="#000" /> 
-        {children}
+        <NextTopLoader showSpinner={false} color="#000" />
+          <StoreProvider>
+          {children}
+          </StoreProvider >
         <Toaster />
       </body>
     </html>
