@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/input-otp"
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import BackToHome from "@/components/molecules/BackToHome";
+import BackToHome from "@/components/shared/BackToHome";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";

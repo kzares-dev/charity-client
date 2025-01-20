@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import BackToHome from "@/components/molecules/BackToHome";
+import BackToHome from "@/components/shared/BackToHome";
 
 const formSchema = z.object({
     fullname: z.string().optional(),

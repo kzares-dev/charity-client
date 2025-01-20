@@ -7,9 +7,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import OrganizationCard from "../atoms/OrganizationCard"
+import OrganizationCard from "./OrganizationCard"
 
-export default function OrganizationContainer() {
+export default function OrganizationsList() {
   return (
     <Carousel className="w-full">
       <CarouselContent className="-ml-1">

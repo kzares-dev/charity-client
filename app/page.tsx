@@ -1,9 +1,9 @@
-import Banner from "@/components/atoms/Banner";
-import Header from "@/components/molecules/Header";
-import About from "@/components/pages/Home.About";
-import HomeBanner from "@/components/pages/Home.Banner";
-import Process from "@/components/pages/Home.Process";
+import Banner from "@/components/shared/Banner";
+import About from "@/components/Home/About";
+import HomeBanner from "@/components/Home/Banner";
+import Process from "@/components/Home/Process";
 import dog_large_banner from "@/public/images/dog_large_banner.jpg"
+import Header from "@/components/Home/Header";
 
 export default function Home() {
   return (

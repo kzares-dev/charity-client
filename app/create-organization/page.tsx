@@ -22,9 +22,10 @@ import { z } from 'zod'
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import BackToHome from '@/components/molecules/BackToHome';
+import BackToHome from '@/components/shared/BackToHome';
 import { Textarea } from '@/components/ui/textarea';
 import { organizationRegisterAction } from '@/lib/actions/organization.action';
+import { PawsBackground } from '@/components/shared/PawsBackground';
 
 const formSchema = z.object({
     adminFullname: z.string().min(3, {
@@ -66,7 +67,8 @@ export default function CreateOrganization() {
             })
     }
 
-    return <section className="w-full bg-gray-100 min-h-screen flex pt-[20vh] px-2 pb-5 justify-center">
+    return <section className="w-full min-h-screen flex pt-[20vh] px-2 pb-5 justify-center">
+        <PawsBackground />
         <div className="w-full py-10 max-w-2xl h-fit bg-white border px-5 rounded-lg relative shadow">
             <div className="flex items-center justify-center w-full absolute -top-[7.5rem]">
                 <Image className='-ml-9' width={200} src={dog_create_organization} alt='' />

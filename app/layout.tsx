@@ -4,6 +4,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
 import StoreProvider from "@/lib/store/provider/storeProvider";
+import { Sidebar, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,9 +22,9 @@ export default function RootLayout({
         className={`antialiased`}
       >
         <NextTopLoader showSpinner={false} color="#000" />
-          <StoreProvider>
+        <StoreProvider>
           {children}
-          </StoreProvider >
+        </StoreProvider >
         <Toaster />
       </body>
     </html>
